@@ -34,15 +34,16 @@ public class SBM {
 	public int trackedAddSBM;
 	
 	private SBMTestHardware theRobot = null;
-	private SBMTestDriveCode myOpMode = null;
+	
+	// private SBMTestDriveCode myOpMode = null;
 	
 	public SBM(SBMTestHardware hardware) {
 		theRobot = hardware;
 	}
 	
-	public SBM(SBMTestDriveCode opmode) {
-		myOpMode = opmode;
-	}
+	// public SBM(SBMTestDriveCode opmode) {
+	// 	myOpMode = opmode;
+	// }
 	/* 
 	Why do we have 2 different versions? why is there an opmode version and a hardware version. you have both in both files. 
 	(by the time you make the sbm in hardware, it has a reference to the opmode, and vice versa. can't you just make one constructor?) 
@@ -59,24 +60,18 @@ public class SBM {
 	
 	public void checkSBM(double runtime) {
 		//go through all objects in sbm
-		for (int i = 0; i > objects.size(); i++) { 
-		/* 
-		BUG, 'i > objects.size()', always false. this loop never runs. 
-		(i starts at 0, so if objects.size() is greater than 0 it exits, or if object.size() IS 0, it still exits because it only continues if its >, not >=).
-		*/
+		for (int i = 0; i < objects.size(); i++) { 
+			HardwareDevice O = objects.get(i);
 			// if the current time is past the object's finish time 
 			if (finishTime.get(i) < runtime) {
 				// possibly change this to switch statement
-				if (objects.get(i) instanceof DcMotor) {
-					DcMotor temp = (DcMotor) objects.get(i);
+				if (O instanceof DcMotor) {
+					DcMotor temp = (DcMotor) O;
 					temp.setPower(resetState.get(i));
-				} else if (objects.get(i) instanceof Servo) {
-					Servo temp = (Servo) objects.get(i);
+				} else if (O instanceof Servo) {
+					Servo temp = (Servo) O;
 					temp.setPosition(resetState.get(i));
-				} else {
-					
-				}
-				
+				}	
 			} 
 		}
 	}
