@@ -44,14 +44,13 @@ public class SBM {
 	
 	public ArrayList<String> name = new ArrayList<String>();
 	
-	public ArrayList<String> testNames = new ArrayList<String>(List.of("John", "Jeff", "Jacob"));
 	public int trackedAddSBM;
 	
 	private SBMTestHardware theRobot = null;
 	
 	// private SBMTestDriveCode myOpMode = null;
 	
-	public SBM(SBMTestHardware hardware) {
+	public SBM(SBMTestHardware hardware, SBMTestDriveCode opmode) {
 		theRobot = hardware;
 	}
 	
@@ -64,11 +63,9 @@ public class SBM {
 	*/
 
 	//Used by other files to add objects and their timers to the SBM checklist
-	public void addSBM(HardwareDevice object, double endTime, float state, String objName) {
-		objects.add(object);
-		finishTime.add(endTime);
-		resetState.add(state);
-		name.add(objName);
+	public void addSBM(HardwareDevice object, double endTime, float state ) {
+		SBMEntry newEntry = new SBMEntry(object, endTime, state );
+		SBMEntiries.push(newEntry);
 		trackedAddSBM++;
 	}
 	
@@ -112,12 +109,13 @@ public class SBM {
 		} else if (list == "Name") {
 			return name;
 		}
-		return returnVal;
 	}
-	/*
-	Perhaps replace with dedicated getters, also perhaps have them or this return formatted versions of the list.
-	Use 'string.equals("string")' instead of ' string == "string"', as the latter can fail when you think it shouldn't.
 
-	*/
+	public int SMBSize() {
+		return SBMEntries.size();
+	}
 
+	public ArrayList<SBMEntry> getEntries(){
+		return SBMEntries;
+	}
 }

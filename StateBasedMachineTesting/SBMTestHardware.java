@@ -16,18 +16,11 @@ import org.firstinspires.ftc.teamcode.SBM;
 public class SBMTestHardware {
 	
 	public LinearOpMode myOpMode = null;
-	//public ElapsedTime runtime = new ElapsedTime();
 
 	public DcMotor motor1 = null;
 	public DcMotor motor2 = null;
 	
-	// public Servo servo1 = null;
-	// public Servo servo2 = null;
-	
-	// public CRServo crServo1 = null;
-	// public CRServo crServo2 = null;
-	
-	private SBM thisMachine = null;
+	public SBM hardwareSBM = null;
 	
 	public SBMTestHardware (LinearOpMode opmode) {
 		myOpMode = opmode;
@@ -37,39 +30,19 @@ public class SBMTestHardware {
 		motor1 = myOpMode.hardwareMap.get(DcMotor.class, "Motor1");
 		motor2 = myOpMode.hardwareMap.get(DcMotor.class, "Motor2");
 		
-		// servo1 = myOpMode.hardwareMap.get(Servo.class, "Servo1");
-		// servo2 = myOpMode.hardwareMap.get(Servo.class, "Servo2");
-		
-		// crServo1 = myOpMode.hardwareMap.get(CRServo.class, "crServo1");
-		// crServo2 = myOpMode.hardwareMap.get(CRServo.class, "crServo2");
-		
 		motor1.setDirection(DcMotor.Direction.FORWARD);
 		motor2.setDirection(DcMotor.Direction.FORWARD);
 	
-		// servo1.setPosition(0);
-		// servo2.setPosition(0);
-		
-		thisMachine = new SBM(this);
+		hardwareSBM = new SBM(this, myOpMode);
 	}
 	
-	// public void runMotor1(double runtime) {
-	// 	thisMachine.addSBM(motor1, runtime, runtime, 0, "Motor1");
-	// 	motor1.setPower(.5);
-	// }
-	
-	public void runMotor(DcMotor motor, double endTime) {
+	public void runMotor(DcMotor object, double endTime, float state) {
 		
-		thisMachine.addSBM(motor1, endTime, 0, "Motor1");
-		motor1.setPower(0.5);
-		/*
-		This takes a motor as a paramater, but uses a hardcoded specific motor? just for testing hopefully?
-		*/
+		hardwareSBM.addSBM(object, endTime, 0);
+		object.setPower(0.5);
 	}
-	// public void runMotor2(double runtime) {
-	// 	thisMachine.addSBM(motor1, 4000, runtime, 0, "Motor2");
-	// 	motor2.setPower(.3);
-	// }
+
 	public void runCheckSBM(double runtime){
-		thisMachine.checkSBM(runtime);
+		hardwareSBM.checkSBM(runtime);
 	}
 }
