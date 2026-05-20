@@ -15,7 +15,21 @@ import org.firstinspires.ftc.teamcode.SBMTestHardware;
 import org.firstinspires.ftc.teamcode.SBMTestDriveCode;
 
 public class SBM {
-
+	private class SBMEntry {
+	public HardwareDevice device = null;
+	public double finishtime = null;
+	public float resetState = null;
+	public String name = null;
+	public SBMEntry(HardwareDevice device, double finishtime, zfloat resetstate, String name ){
+		this.device = device;
+		this.finishtime = finishTime;
+		this.resetState = resetState
+		this.name = name;
+	}
+	@Override
+	public String toString(){
+	}
+}
 	// HardwareDevice to allow for servos and motors, both implement it.
 	public ArrayList<HardwareDevice> objects = new ArrayList<HardwareDevice>();
 	
