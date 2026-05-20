@@ -33,7 +33,7 @@ public class SBMTestHardware {
 		motor1.setDirection(DcMotor.Direction.FORWARD);
 		motor2.setDirection(DcMotor.Direction.FORWARD);
 	
-		hardwareSBM = new SBM(this, myOpMode);
+		hardwareSBM = new SBM(this /*, myOpMode*/);
 	}
 	
 	public void runMotor(DcMotor object, double endTime, float state) {
