@@ -60,7 +60,10 @@ public class SBMTestHardware {
 	public void runMotor(DcMotor motor, double endTime) {
 		
 		thisMachine.addSBM(motor1, endTime, 0, "Motor1");
-		motor1.setPower(.5);
+		motor1.setPower(0.5);
+		/*
+		This takes a motor as a paramater, but uses a hardcoded specific motor? just for testing hopefully?
+		*/
 	}
 	// public void runMotor2(double runtime) {
 	// 	thisMachine.addSBM(motor1, 4000, runtime, 0, "Motor2");
