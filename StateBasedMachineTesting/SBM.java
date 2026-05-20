@@ -16,41 +16,51 @@ import org.firstinspires.ftc.teamcode.SBMTestDriveCode;
 
 public class SBM {
 	private class SBMEntry {
-		public HardwareDevice device;
-		public double finishtime;
-		public float resetState;
-
-		public SBMEntry(HardwareDevice device, double finishtime, float resetstate ){
-			this.device = device;
-			this.finishtime = finishTime;
-			this.resetState = resetState
-		}
-
-		@Override
-		public String toString(){
-			StringBuilder sb = new StringBuilder();
-			sb.append("[");
-			sb.append(myOpMode.hardwareMap.getNamesOf(device).iterator().next());
-			sb.append(", ");
-			sb.append(finishTime);
-			sb.append(", ");
-			sb.append(resetState);
-			sb.append("]");
-			return(sb.toString());
-		}
+	public HardwareDevice device = null;
+	public double finishtime = null;
+	public float resetState = null;
+	public String name = null;
+	public SBMEntry(HardwareDevice device, double finishtime, zfloat resetstate, String name ){
+		this.device = device;
+		this.finishtime = finishTime;
+		this.resetState = resetState
+		this.name = name;
 	}
-
-	private ArrayList<SBMEntry> SBMEntries = new ArrayList<SBMEntry>();
+	@Override
+	public String toString(){
+	}
+}
+	// HardwareDevice to allow for servos and motors, both implement it.
+	public ArrayList<HardwareDevice> objects = new ArrayList<HardwareDevice>();
+	
+	//Time list is the time in miliseconds when the corresponding object needs to be turned off
+	public ArrayList<Double> finishTime = new ArrayList<Double>();
+	
+	//ResetState is the value to set the hardware device to after the time is up - usually a default servo position or 0 for motors
+	public ArrayList<Float> resetState = new ArrayList<Float>(); 
+	/* 
+	Why is this of type Float? You might run into conversion issues because double is what most things use. 
+	*/
+	
+	public ArrayList<String> name = new ArrayList<String>();
 	
 	public int trackedAddSBM;
 	
 	private SBMTestHardware theRobot = null;
-	private SBMTestDriveCode myOpMode = null;
+	
+	// private SBMTestDriveCode myOpMode = null;
 	
 	public SBM(SBMTestHardware hardware, SBMTestDriveCode opmode) {
 		theRobot = hardware;
-		myOpMode = opmode;
-	} 
+	}
+	
+	// public SBM(SBMTestDriveCode opmode) {
+	// 	myOpMode = opmode;
+	// }
+	/* 
+	Why do we have 2 different versions? why is there an opmode version and a hardware version. you have both in both files. 
+	(by the time you make the sbm in hardware, it has a reference to the opmode, and vice versa. can't you just make one constructor?) 
+	*/
 
 	//Used by other files to add objects and their timers to the SBM checklist
 	public void addSBM(HardwareDevice object, double endTime, float state ) {
@@ -61,16 +71,43 @@ public class SBM {
 	
 	public void checkSBM(double runtime) {
 		//go through all objects in sbm
-		for (SBMEntry entry : SBMEntries){
-			if (entry.finishTime < runtime){
-				if (entry.device instanceof DcMotor) {
-					DcMotor temp = (DcMotor) objects.get(i);
-					temp.setPower(entry.resetState);
-				} else if (objects.get(i) instanceof Servo) {
-					Servo temp = (Servo) entry.device;
-					temp.setPosition(entry.resetState);
-				}
-			}
+		for (int i = 0; i < objects.size(); i++) { 
+			HardwareDevice O = objects.get(i);
+			// if the current time is past the object's finish time 
+			if (finishTime.get(i) < runtime) {
+				// possibly change this to switch statement
+				if (O instanceof DcMotor) {
+					DcMotor temp = (DcMotor) O;
+					temp.setPower(resetState.get(i));
+				} else if (O instanceof Servo) {
+					Servo temp = (Servo) O;
+					temp.setPosition(resetState.get(i));
+				}	
+			} 
+		}
+	}
+	/*
+	Improvements that could be made:
+	1. cache objects.get(i), its used multiple times and we can just store it to a variable once. 
+	2. Wrapper classes. 
+	3. actually remove the objects entries when it is ready. to be executed. 
+	*/
+	
+	public ArrayList SBMTelemetry(String list) {
+		ArrayList<String> returnVal = new ArrayList<String>();
+		returnVal.add("Unkown");
+		if (list == "Objects") {
+			return objects.size();
+			/*
+			Does this work? it's supposed to return an Arraylist, but this is an int.
+			Formatting the lists beforehand and returning a string would make this better, just turn the int to a string.
+			*/
+		} else if (list == "FinishTime") {
+			return finishTime;
+		} else if (list == "ResetState") {
+			return resetState;
+		} else if (list == "Name") {
+			return name;
 		}
 	}
 
