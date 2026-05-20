@@ -40,15 +40,19 @@ public class SBMTestDriveCode extends LinearOpMode {
 			telemetry.addData("Runtime: ", runtime.milliseconds());
 			telemetry.addData("SBM Checks: ", trackCheckTimeRuns);
 			ArrayList<SBM.SBMEntry> entries = robot.hardwareSBM.getEntries();
-			for (int i=0; i < entries.size();, i++){
-				telemetry.addData("", entries.get(i).toString);
-			}
+				for (int i=0; i < entries.size(); i++){
+					telemetry.addData("", entries.get(i).toString());
+				}
 			telemetry.addData("Tracked Add Times: ", robot.hardwareSBM.trackedAddSBM);
 
 			telemetry.update();
 			
 			if(gamepad1.xWasReleased()){
-				robot.runMotor(robot.motor1, 1000, 0);
+				robot.runMotor(robot.motor1, 3000, 0);
+			}
+			
+			if(gamepad1.yWasReleased()){
+				robot.runMotor(robot.motor2, 1000, 0);
 			}
 
 			if(checkTime + cycleTime < runtime.milliseconds()){
