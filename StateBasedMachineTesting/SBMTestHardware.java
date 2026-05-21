@@ -37,8 +37,7 @@ public class SBMTestHardware {
 	}
 	
 	public void runMotor(DcMotor object, double endTime, float state) {
-		
-		hardwareSBM.addSBM(object, endTime, 0);
+		hardwareSBM.addSBM(object, endTime, state);
 		object.setPower(0.5);
 	}
 
