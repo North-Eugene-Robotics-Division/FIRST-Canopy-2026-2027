@@ -30,7 +30,11 @@ public class SBM {
 		public String toString(){
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
-			sb.append(myOpMode.hardwareMap.getNamesOf(device).iterator().next());
+			sb.append(theRobot.myOpMode.hardwareMap.getNamesOf(device).stream().findFirst().orElse("Unknown"));
+			/* 
+			The error was that you remove the myOpMode variable, which this used. I swapped it to use myOpMode from the hardware. 
+			also added null checking.
+			*/
 			sb.append(", ");
 			sb.append(finishTime);
 			sb.append(", ");
@@ -45,11 +49,9 @@ public class SBM {
 	public int trackedAddSBM;
 	
 	private SBMTestHardware theRobot = null;
-	private SBMTestDriveCode myOpMode = null;
 	
-	public SBM(SBMTestHardware hardware /*, SBMTestDriveCode opmode*/) {
+	public SBM(SBMTestHardware hardware) {
 		theRobot = hardware;
-		//myOpMode = opmode;
 	} 
 
 	//Used by other files to add objects and their timers to the SBM checklist
@@ -61,6 +63,7 @@ public class SBM {
 	
 	public void checkSBM(double runtime) {
 		//go through all objects in sbm
+		ArrayList<SBMEntry> toRemove = new ArrayList<SBMEntry>();
 		for (SBMEntry entry : SBMEntries){
 			if (entry.finishTime < runtime){
 				if (entry.device instanceof DcMotor) {
@@ -70,12 +73,13 @@ public class SBM {
 					Servo temp = (Servo) entry.device;
 					temp.setPosition(entry.resetState);
 				}
+				toRemove.add(entry);
 			}
 		}
-	}
-
-	public int SMBSize() {
-		return SBMEntries.size();
+		// SBMEntries.removeAll(toRemove);
+		/* 
+		I added removal to the list after they are processed, but I commented out the line so you can see that it works before we remove them.
+		*/
 	}
 
 	public ArrayList<SBMEntry> getEntries(){
