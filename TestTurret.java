@@ -56,30 +56,31 @@ public class TestTurret extends LinearOpMode {
         leftRampGear = hardwareMap.get(CRServo.class, "leftGear");
         rightRampGear = hardwareMap.get(CRServo.class, "rightGear");
        
-        flywheel.setDirection(DcMotor.Direction.REVERSE);
-       
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Running");
-            telemetry.update();
            
             float flywheelSpeed = gamepad1.right_trigger;
-            // flywheel.setPower(flywheelSpeed);
+            flywheel.setPower(flywheelSpeed); // Need to change speed for the big wiffle balls (Nectar)
             telemetry.addData("Trigger: ", flywheelSpeed);
            
             if(gamepad1.left_bumper == true){
                 leftRampGear.setPower(-1.0);
-                rightRampGear.setPower(-1.0);
+                rightRampGear.setPower(1.0);
+                telemetry.addData("Left Bumper","True");
             } else if(gamepad1.right_bumper == true){
                 leftRampGear.setPower(1.0);
-                rightRampGear.setPower(1.0);
+                rightRampGear.setPower(-1.0);
+                telemetry.addData("Right Bumper","True");
             } else {
                 leftRampGear.setPower(0);
                 rightRampGear.setPower(0);
+                telemetry.addData("No Bumper","True");
             }
+            telemetry.update();
         }
     }
 }
